@@ -1,0 +1,77 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# Logs
+*.log
+log/
+logs/
+
+# Maven
+target/
+HELP.md
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+release.properties
+
+# Node.js/Electron
+node_modules/
+npm-debug.log
+yarn-error.log
+.pnpm-debug.log
+
+# Electron builds and outputs
+dist/
+out/
+build/
+
+# Electron builder config
+/electron-builder.yaml
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# OS specific
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Miscellaneous
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Project backups
+*.bak
