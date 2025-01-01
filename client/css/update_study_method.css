@@ -1,0 +1,143 @@
+/* Tổng thể form */
+.container {
+    max-width: 95%;
+    margin-top: 50px;
+    justify-self: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Nội dung chính */
+#main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+    width: 100%;
+}
+
+#main-content h3 {
+    font-size: 24px;
+    color: #007bff;
+    /* Màu xanh nổi bật */
+    margin-bottom: 20px;
+    justify-self: center;
+}
+
+/* Form chi tiết */
+#study-method-form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    width: 100%;
+}
+
+#study-method-form label {
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    /* Tông xám nhạt */
+    display: block;
+}
+
+#study-method-form .label-input input,
+#study-method-form .label-input textarea,
+#study-method-form .label-input select {
+    width: 500px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#study-method-form .label-input textarea {
+    resize: none;
+    height: 100px;
+}
+
+#study-method-form .thumbnail-input .thumbnail-preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#study-method-form .thumbnail-input .thumbnail-preview-container input[type="file"] {
+    width: 200px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#study-method-form .thumbnail-input .thumbnail-preview-container img {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    justify-self: center;
+}
+
+#study-method-form .label-input input:focus,
+#study-method-form .label-input textarea:focus,
+#study-method-form .label-input select:focus {
+    outline: none;
+    border-color: #007bff;
+    /* Màu xanh dương khi focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Nút bấm */
+#study-method-form button:not(.ql-formats button) {
+    width: 500px;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #007bff;
+    /* Màu xanh dương */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+#study-method-form button:not(.ql-formats button):hover {
+    background-color: #0056b3;
+    /* Màu xanh đậm hơn khi hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Editor chi tiết */
+#detail-editor-container {
+    grid-column: span 2;
+    width: 100%;
+}
+
+#detail-editor {
+    height: 300px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #444;
+}
+
+
+/* Màu nền toàn trang */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    /* Màu xanh nhạt nhẹ nhàng */
+    color: #333;
+}

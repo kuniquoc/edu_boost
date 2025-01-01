@@ -1,0 +1,138 @@
+:root {
+    --background-color: #ffffff;
+    --light-blue-color: #5696f8;
+    --dark-blue-color: #068edd;
+}
+
+.modal {
+    display: none;
+    /* Ẩn modal mặc định */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Nội dung modal */
+.modal-content {
+    background-color: #fefefe;
+    /* Nền trắng cho nội dung */
+    margin: 15% auto;
+    /* Đặt margin để căn giữa */
+    padding: 20px;
+    /* Padding cho nội dung */
+    border: 1px solid #888;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Bóng đổ */
+}
+
+.modal .form-name {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Nút đóng modal */
+.modal .close {
+    color: #aaa;
+    /* Màu nút đóng */
+    float: right;
+    /* Căn bên phải */
+    font-size: 28px;
+    /* Kích thước chữ */
+    font-weight: bold;
+    /* Đậm chữ */
+    cursor: pointer;
+    /* Con trỏ khi hover */
+}
+
+.modal .close:hover,
+.modal .close:focus {
+    color: black;
+    /* Màu khi hover hoặc focus */
+    text-decoration: none;
+    /* Không có gạch chân */
+    cursor: pointer;
+    /* Con trỏ khi hover */
+}
+
+/* Định nghĩa cho các form trong modal */
+.modal .logForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal #schedule-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal .form-group label {
+    margin-bottom: 2px;
+}
+
+.modal .form-group input {
+    padding: 5px;
+    padding-left: 10px;
+    background-color: #f6f4f4;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Nút trong form */
+.modal .submit {
+    background-color: var(--light-blue-color);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal .submit:hover {
+    background-color: var(--dark-blue-color);
+    /* Màu nền khi hover */
+}
+
+/* Thông báo lỗi */
+.modal .error-message {
+    align-self: center;
+    color: red;
+    margin-top: 10px;
+}
+
+/* Thông báo thành công */
+.modal .success-message {
+    align-self: center;
+    color: green;
+    margin-top: 10px;
+}
+
+.modal .changeModal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.modal .changeModal a {
+    color: var(--light-blue-color);
+    margin-left: 10px;
+}
