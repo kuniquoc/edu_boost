@@ -1,4 +1,4 @@
-package quochung.server.payload;
+package quochung.server.payload.StudyMethod;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -20,10 +20,6 @@ public class Reminder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String subject;
-
-    private String body;
-
     private LocalDateTime scheduledTime;
 
     @ManyToOne(fetch = FetchType.EAGER)

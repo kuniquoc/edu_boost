@@ -1,4 +1,4 @@
-package quochung.server.payload;
+package quochung.server.payload.auth;
 
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;

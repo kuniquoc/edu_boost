@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 import quochung.server.model.Role;
 import quochung.server.payload.MessageDto;
-import quochung.server.payload.PasswordUpdateDto;
-import quochung.server.payload.UserProfileDto;
+import quochung.server.payload.User.PasswordUpdateDto;
+import quochung.server.payload.User.UserProfileDto;
 import quochung.server.service.UserDetailsServiceImplement;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api")
@@ -90,6 +93,7 @@ public class UserController {
             return ResponseEntity.status(500).body(new MessageDto("Lỗi server"));
         }
     }
+    
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")

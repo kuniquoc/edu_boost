@@ -1,4 +1,4 @@
-package quochung.server.payload;
+package quochung.server.payload.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

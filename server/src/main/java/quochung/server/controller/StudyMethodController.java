@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import quochung.server.payload.*;
+import quochung.server.payload.StudyMethod.CreateStudyMethodDto;
+import quochung.server.payload.StudyMethod.StudyMethodDetailDto;
 import quochung.server.service.StudyMethodService;
 // import quochung.server.util.HtmlSanitizer;
 

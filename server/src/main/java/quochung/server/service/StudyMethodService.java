@@ -4,7 +4,10 @@ import org.springframework.stereotype.Service;
 
 import quochung.server.model.StudyMethod;
 import quochung.server.model.SubjectType;
-import quochung.server.payload.*;
+import quochung.server.payload.StudyMethod.CreateStudyMethodDto;
+import quochung.server.payload.StudyMethod.StudyMethodDetailDto;
+import quochung.server.payload.StudyMethod.StudyMethodElementDto;
+import quochung.server.payload.StudyMethod.StudyMethodList;
 import quochung.server.repository.SubjectTypeRepository;
 import quochung.server.repository.EventStudyMethodRepository;
 import quochung.server.repository.FavoriteRepository;
@@ -164,6 +167,5 @@ public class StudyMethodService {
         eventStudyMethodRepository.deleteByStudyMethodId(id);
         favoriteRepository.deleteByStudyMethodId(id);
         studyMethodRepository.delete(studyMethod);
-
     }
 }

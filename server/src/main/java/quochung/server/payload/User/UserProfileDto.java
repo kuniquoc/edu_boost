@@ -1,4 +1,4 @@
-package quochung.server.payload;
+package quochung.server.payload.User;
 
 import lombok.Data;
 import java.time.LocalDate;
@@ -10,8 +10,10 @@ public class UserProfileDto {
     private String email;
     private String phone;
     private String gender;
+    private boolean emailVerified;
 
-    public UserProfileDto(String fullName, LocalDate birthday, String email, String phone, String gender) {
+    public UserProfileDto(String fullName, LocalDate birthday, String email, String phone, String gender,
+            boolean emailVerified) {
         if (birthday.getYear() < 1900) {
             throw new IllegalArgumentException("Birthday must be after 1900");
         } else if (birthday.getMonthValue() < 1 || birthday.getMonthValue() > 12) {
@@ -25,5 +27,6 @@ public class UserProfileDto {
         this.email = email;
         this.phone = phone;
         this.gender = gender;
+        this.emailVerified = emailVerified;
     }
 }

@@ -17,7 +17,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,13 +29,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    // username should be unique
     private String username;
     private String password;
-    @Column(name = "full_name")
     private String fullName = "";
     private LocalDate birthday = LocalDate.now();
+    // email should be unique
     private String email = "";
+    private boolean emailVerified = false;
     private String phone = "";
     private String gender = "";
 

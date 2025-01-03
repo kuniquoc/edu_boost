@@ -16,9 +16,9 @@ import quochung.server.model.Event;
 import quochung.server.model.Role;
 import quochung.server.model.Schedule;
 import quochung.server.model.User;
-import quochung.server.payload.PasswordUpdateDto;
-import quochung.server.payload.UserDetailDto;
-import quochung.server.payload.UserProfileDto;
+import quochung.server.payload.User.PasswordUpdateDto;
+import quochung.server.payload.User.UserDetailDto;
+import quochung.server.payload.User.UserProfileDto;
 import quochung.server.repository.EventRepository;
 import quochung.server.repository.RoleRepository;
 import quochung.server.repository.ScheduleRepository;
@@ -68,7 +68,7 @@ public class UserDetailsServiceImplement implements UserDetailsService {
     public UserProfileDto getUserProfile() {
         User user = getCurrentUser();
         return new UserProfileDto(user.getFullName(), user.getBirthday(), user.getEmail(), user.getPhone(),
-                user.getGender());
+                user.getGender(), user.isEmailVerified());
     }
 
     public Collection<? extends GrantedAuthority> getRole() {

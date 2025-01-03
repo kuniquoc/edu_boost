@@ -1,4 +1,4 @@
-package quochung.server.payload;
+package quochung.server.payload.event;
 
 import lombok.Getter;
 import lombok.Setter;

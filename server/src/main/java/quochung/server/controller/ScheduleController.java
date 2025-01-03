@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import quochung.server.payload.ScheduleDTO;
+
+import quochung.server.payload.schedule.ScheduleDTO;
 import quochung.server.service.ScheduleService;
 
 import java.util.List;

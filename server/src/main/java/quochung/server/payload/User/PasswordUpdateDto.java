@@ -1,4 +1,4 @@
-package quochung.server.payload;
+package quochung.server.payload.User;
 
 import lombok.Data;
 

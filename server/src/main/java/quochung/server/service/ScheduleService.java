@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import quochung.server.model.Event;
 import quochung.server.model.Schedule;
-import quochung.server.payload.ScheduleDTO;
+import quochung.server.payload.schedule.ScheduleDTO;
 import quochung.server.repository.EventRepository;
 import quochung.server.repository.ScheduleRepository;
 import quochung.server.repository.TodoItemRepository;

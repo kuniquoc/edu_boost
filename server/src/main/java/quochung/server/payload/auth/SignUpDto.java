@@ -1,4 +1,4 @@
-package quochung.server.payload;
+package quochung.server.payload.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package quochung.server.payload;
+package quochung.server.payload.User;
 
 import java.util.Set;
 import java.time.LocalDate;
