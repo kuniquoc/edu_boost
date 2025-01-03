@@ -136,3 +136,16 @@
     color: var(--light-blue-color);
     margin-left: 10px;
 }
+
+/* Quên mật khẩu */
+.modal #forgetModal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.modal #forgetModal a {
+    color: var(--light-blue-color);
+    margin-left: 10px;
+}

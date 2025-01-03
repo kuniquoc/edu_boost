@@ -80,6 +80,7 @@ body {
 
 .form-group {
     margin-bottom: 15px;
+    width: 100%;
 }
 
 .form-group label {
@@ -108,4 +109,25 @@ body {
 
 .userForm button:hover {
     background-color: #16a085;
+}
+
+#authEmailForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#authEmailButton {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+#authEmailButton input {
+    flex: 3;
+}
+
+#authEmailButton button {
+    flex: 1;
 }

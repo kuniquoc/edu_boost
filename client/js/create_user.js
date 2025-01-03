@@ -59,6 +59,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    document.getElementById("confirm-password").onchange = validatePassword;
+
+    function validatePassword() {
+        var pass1 = document.getElementById("password").value;
+        var pass2 = document.getElementById("confirm-password").value;
+        if (pass1 != pass2)
+            document.getElementById("confirm-password").setCustomValidity("Mật khẩu không khớp, vui lòng nhập lại");
+        else
+            document.getElementById("confirm-password").setCustomValidity('');
+    }
+
 
     document.getElementById("user-form").addEventListener("submit", async function (e) {
         e.preventDefault();
@@ -91,7 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (response.status === 201) {
                 alert("Tạo người dùng thành công.");
-                window.location.back();
+                window.history.back();
             } else {
                 alert("Tạo người dùng thất bại. " + result.message);
             }
@@ -99,6 +110,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Lỗi: ", error);
         }
     });
+
+
 
 });
 

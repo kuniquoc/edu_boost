@@ -6,6 +6,7 @@ import quochung.server.model.StudyMethod;
 import quochung.server.model.SubjectType;
 import quochung.server.payload.*;
 import quochung.server.repository.SubjectTypeRepository;
+import quochung.server.repository.EventStudyMethodRepository;
 import quochung.server.repository.FavoriteRepository;
 import quochung.server.repository.StudyMethodRepository;
 
@@ -26,6 +27,9 @@ public class StudyMethodService {
 
     @Autowired
     private FavoriteRepository favoriteRepository;
+
+    @Autowired
+    private EventStudyMethodRepository eventStudyMethodRepository;
 
     @Autowired
     private UserDetailsServiceImplement userDetailsServiceImplement;
@@ -157,6 +161,9 @@ public class StudyMethodService {
     public void deleteStudyMethod(Long id) throws BadRequestException {
         StudyMethod studyMethod = studyMethodRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Không tìm thấy phương pháp học"));
+        eventStudyMethodRepository.deleteByStudyMethodId(id);
+        favoriteRepository.deleteByStudyMethodId(id);
         studyMethodRepository.delete(studyMethod);
+
     }
 }

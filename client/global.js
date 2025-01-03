@@ -25,6 +25,10 @@ function addLoginModal() {
                 <p>Chưa có tài khoản? </p>
                 <a href="javascript:void(0);" id="registerButton" onclick="changeToRegister()">Đăng ký</a>
             </div>
+            <div id="forgetModal">
+                <p>Quên mật khẩu? </p>
+                <a href="javascript:void(0);" id="forgetButton" onclick="window.location.href='forget_password.html'">Quên mật khẩu</a>
+            </div>
         </div>
     `;
 }

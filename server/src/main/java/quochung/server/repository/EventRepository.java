@@ -16,4 +16,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByScheduleIdAndStartDateBetween(@Param("scheduleId") Long scheduleId,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
+
+    void deleteByScheduleId(Long scheduleId);
 }

@@ -9,5 +9,7 @@ import quochung.server.model.Schedule;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+    void deleteByUserId(Long userId);
+
     List<Schedule> findByUserId(Long userId);
 }

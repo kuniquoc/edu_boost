@@ -33,9 +33,7 @@ public class FavoriteService {
     }
 
     public void removeFavorite(Long studyMethodId) throws BadRequestException {
-        Long userId = userDetailsServiceImplement.getCurrentUserId();
-        Favorite favorite = favoriteRepository.findByUserIdAndStudyMethodId(userId, studyMethodId)
-                .orElseThrow(() -> new BadRequestException("Không tìm thấy phương pháp học trong danh sách yêu thích"));
-        favoriteRepository.delete(favorite);
+        favoriteRepository.deleteByUserIdAndStudyMethodId(userDetailsServiceImplement.getCurrentUser().getId(),
+                studyMethodId);
     }
 }

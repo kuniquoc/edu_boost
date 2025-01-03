@@ -7,14 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import quochung.server.model.Event;
 import quochung.server.model.Schedule;
 import quochung.server.payload.ScheduleDTO;
+import quochung.server.repository.EventRepository;
 import quochung.server.repository.ScheduleRepository;
+import quochung.server.repository.TodoItemRepository;
 
 @Service
 public class ScheduleService {
     @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private TodoItemRepository todoItemRepository;
 
     @Autowired
     private UserDetailsServiceImplement userDetailsService;
@@ -38,8 +47,14 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
     }
 
-    public void deleteSchedule(Long scheduleId) {
-        scheduleRepository.deleteById(scheduleId);
+    public void deleteSchedule(Long scheduleId) throws BadRequestException {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new BadRequestException());
+        List<Event> events = schedule.getEvents();
+        for (Event event : events) {
+            todoItemRepository.deleteByEventId(event.getId());
+        }
+        eventRepository.deleteByScheduleId(scheduleId);
+        scheduleRepository.delete(schedule);
     }
 
     public List<ScheduleDTO> getSchedulesByUserId() {

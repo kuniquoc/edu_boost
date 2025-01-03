@@ -15,4 +15,8 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     void deleteByUserIdAndStudyMethodId(Long userId, Long studyMethodId);
 
     boolean existsByUserIdAndStudyMethodId(Long userId, Long studyMethodId);
+
+    void deleteByUserId(Long userId);
+
+    void deleteByStudyMethodId(Long studyMethodId);
 }

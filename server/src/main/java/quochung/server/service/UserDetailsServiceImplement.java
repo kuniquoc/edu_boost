@@ -12,12 +12,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import quochung.server.model.Event;
 import quochung.server.model.Role;
+import quochung.server.model.Schedule;
 import quochung.server.model.User;
 import quochung.server.payload.PasswordUpdateDto;
 import quochung.server.payload.UserDetailDto;
 import quochung.server.payload.UserProfileDto;
+import quochung.server.repository.EventRepository;
 import quochung.server.repository.RoleRepository;
+import quochung.server.repository.ScheduleRepository;
+import quochung.server.repository.TodoItemRepository;
 import quochung.server.repository.UserRepository;
 
 @Service
@@ -25,6 +30,15 @@ public class UserDetailsServiceImplement implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private TodoItemRepository todoItemRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -84,6 +98,16 @@ public class UserDetailsServiceImplement implements UserDetailsService {
 
     public void deleteUser() {
         User user = getCurrentUser();
+        List<Schedule> schedules = user.getSchedules();
+        for (Schedule schedule : schedules) {
+            List<Event> events = schedule.getEvents();
+            for (Event event : events) {
+                todoItemRepository.deleteByEventId(event.getId());
+            }
+            eventRepository.deleteByScheduleId(schedule.getId());
+        }
+        scheduleRepository.deleteByUserId(user.getId());
+
         userRepository.delete(user);
     }
 
@@ -116,6 +140,17 @@ public class UserDetailsServiceImplement implements UserDetailsService {
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng với id: " + userId));
+
+        List<Schedule> schedules = user.getSchedules();
+        for (Schedule schedule : schedules) {
+            List<Event> events = schedule.getEvents();
+            for (Event event : events) {
+                todoItemRepository.deleteByEventId(event.getId());
+            }
+            eventRepository.deleteByScheduleId(schedule.getId());
+        }
+        scheduleRepository.deleteByUserId(user.getId());
+
         userRepository.delete(user);
     }
 

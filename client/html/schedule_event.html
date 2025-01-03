@@ -74,7 +74,7 @@
             <input type="date" id="eventDate" class="editable-input" value="2025-01-01">
 
             <label for="eventTime">Thời gian bắt đầu:</label>
-            <input type="time" id="eventStartTime" class="editable-input" value="08:0">
+            <input type="time" id="eventStartTime" class="editable-input" value="08:00">
 
             <label for="eventTime">Thời gian kết thúc:</label>
             <input type="time" id="eventEndTime" class="editable-input" value="10:00">
@@ -82,6 +82,16 @@
             <label for="eventDescription">Mô tả sự kiện:</label>
             <textarea id="eventDescription" class="editable-input"
                 rows="5">Học các bài tập giải phương trình bậc 2</textarea>
+
+            <label for="reminder">Nhắc nhở:</label>
+            <select id="reminder" class="editable-input" name="reminder">
+                <option value="0">Không</option>
+                <option value="5">Trước 10 phút</option>
+                <option value="10">Trước 30 phút</option>
+                <option value="15">Trước 1 tiếng</option>
+                <option value="30" selected>Trước 2 tiếng</option>
+                <option value="60">Trước 1 ngày</option>
+            </select>
             <div id="event-button">
                 <button class="save-event" onclick="saveEvent()">Lưu</button>
                 <button class="delete-event" onclick="deleteEvent()">Xoá</button>

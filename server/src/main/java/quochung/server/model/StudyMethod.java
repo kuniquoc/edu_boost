@@ -1,10 +1,5 @@
 package quochung.server.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,14 +19,10 @@ public class StudyMethod {
 
     private String thumbnail;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subject_type_id")
-    @JsonIgnore
     private SubjectType type;
 
     @Column(columnDefinition = "TEXT")
     private String detail;
-
-    @ManyToMany(mappedBy = "studyMethods", fetch = FetchType.LAZY)
-    private List<Event> events = new ArrayList<>();
 }

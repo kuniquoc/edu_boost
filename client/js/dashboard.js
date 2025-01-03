@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function fetchRoles() {
     const token = sessionStorage.getItem("token");
-    const response = await fetch(API_BASE_URL + "users/roles", {
+    const response = await fetch(API_BASE_URL + "/users/roles", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
