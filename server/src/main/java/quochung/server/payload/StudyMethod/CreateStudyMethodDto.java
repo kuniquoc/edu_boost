@@ -1,13 +1,11 @@
-package quochung.server.payload.StudyMethod;
+package quochung.server.payload.studyMethod;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-public class CreateStudyMethodDto {
+public class CreateStudyMethodDTO {
 
     private String name;
 

@@ -1,9 +1,14 @@
-package quochung.server.payload.User;
+package quochung.server.payload.user;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserProfileDto {
     private String fullName;
     private LocalDate birthday;

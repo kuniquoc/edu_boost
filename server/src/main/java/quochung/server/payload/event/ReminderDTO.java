@@ -1,12 +1,14 @@
 package quochung.server.payload.event;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class TodoItemDTO {
+public class ReminderDTO {
     private Long id;
-    private String description;
-    private boolean completed;
+
+    private LocalDateTime scheduledTime;
 }

@@ -1,4 +1,4 @@
-package quochung.server.payload.StudyMethod;
+package quochung.server.payload.studyMethod;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudyMethodList {
-    List<StudyMethodElementDto> studyMethodElementDtos;
+    List<StudyMethodElementDTO> studyMethodElementDTOs;
     int totalPages;
     int currentPage;
 }

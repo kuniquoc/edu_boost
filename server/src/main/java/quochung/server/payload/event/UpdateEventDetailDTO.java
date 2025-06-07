@@ -25,7 +25,7 @@ public class UpdateEventDetailDTO {
 
     private List<TodoItemDTO> todoItems = new ArrayList<>();
 
-    private List<Long> reminderIds = new ArrayList<>();
+    private List<ReminderDTO> reminders = new ArrayList<>();
 
     private List<Long> studyMethodIds = new ArrayList<>();
 }

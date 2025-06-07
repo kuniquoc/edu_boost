@@ -1,8 +1,10 @@
-package quochung.server.payload.User;
+package quochung.server.payload.user;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class PasswordUpdateDto {
     private String oldPassword;
     private String newPassword;

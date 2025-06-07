@@ -1,11 +1,11 @@
-package quochung.server.payload.StudyMethod;
+package quochung.server.payload.studyMethod;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class StudyMethodElementDto {
+public class StudyMethodElementDTO {
 
     private Long id;
 
@@ -17,5 +17,5 @@ public class StudyMethodElementDto {
 
     private Long typeId;
 
-    private boolean isFavorite;
+    private boolean favorite;
 }

@@ -1,20 +1,26 @@
 package quochung.server.payload.user;
 
-import java.util.Set;
 import java.time.LocalDate;
+import java.util.Set;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserDetailDto {
+@Setter
+public class UserElementDTO {
+
     private Long id;
-    private Set<RoleDTO> roles;
+
     private String fullName;
+
     private LocalDate birthday;
+
     private String email;
+
     private String phone;
+
     private String gender;
+
+    private Set<RoleDTO> roles;
 }

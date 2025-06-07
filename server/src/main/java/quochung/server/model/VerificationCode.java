@@ -2,8 +2,6 @@ package quochung.server.model;
 
 import java.time.LocalDateTime;
 
-import org.springframework.cglib.core.Local;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
