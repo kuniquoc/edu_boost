@@ -7,6 +7,8 @@
     border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     gap: 20px;
 }
 
@@ -109,4 +111,20 @@
 .content-detail p {
     font-size: 1rem;
     line-height: 1.5;
+}
+
+#btn-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#btn-container button {
+    padding: 10px 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff3e3e;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
 }

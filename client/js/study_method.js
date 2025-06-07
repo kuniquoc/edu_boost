@@ -83,6 +83,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     //#endregion
 
     await fetchStudyMethods();
+
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    const toastrState = new URLSearchParams(window.location.search).get("toastr");
+    if (toastrState) {
+        const toastrMessage = new URLSearchParams(window.location.search).get("toastrMessage");
+        if (toastrState === "success") {
+            toastr.success(toastrMessage);
+        } else if (toastrState === "error") {
+            toastr.error(toastrMessage);
+        }
+    }
 });
 
 // Function to fetch study methods from API
@@ -132,7 +160,7 @@ async function fetchStudyMethods() {
         const subjectTypes = await getSubjectTypes();
 
         // Iterate over the methods and create HTML elements to display them
-        data.data.studyMethodElementDtos.forEach(method => {
+        data.data.studyMethodElementDTOs.forEach(method => {
             const card = document.createElement('div');
             card.classList.add('card');
             card.innerHTML = `
@@ -157,7 +185,7 @@ async function fetchStudyMethods() {
             // Append the card to the study methods container
             studyMethodsContainer.appendChild(card);
 
-            if (method.isFavorite) {
+            if (method.favorite) {
                 changeHeartColor(method.id, "red");
             }
         });
@@ -189,7 +217,7 @@ async function favorite(id) {
 async function addFavorite(id) {
     const token = sessionStorage.getItem('token');
     if (!token) {
-        alert("Vui lòng đăng nhập để thực hiện chức năng này");
+        toastr.error("Vui lòng đăng nhập để thực hiện chức năng này");
         return;
     }
     const respone = await fetch(API_BASE_URL + '/favorites/' + id, {
@@ -201,7 +229,7 @@ async function addFavorite(id) {
         }
     });
     if (!respone.ok) {
-        alert('Đã xảy ra lỗi khi thêm vào yêu thích');
+        toastr.error('Đã xảy ra lỗi khi thêm vào yêu thích');
         return;
     }
 
@@ -211,7 +239,7 @@ async function addFavorite(id) {
 async function removeFavorite(id) {
     const token = sessionStorage.getItem('token');
     if (!token) {
-        alert("Vui lòng đăng nhập để thực hiện chức năng này");
+        toastr.error("Vui lòng đăng nhập để thực hiện chức năng này");
         return;
     }
     const respone = await fetch(API_BASE_URL + '/favorites/' + id, {
@@ -223,7 +251,7 @@ async function removeFavorite(id) {
         }
     });
     if (!respone.ok) {
-        alert('Đã xảy ra lỗi khi xóa khỏi yêu thích');
+        toastr.error('Đã xảy ra lỗi khi xóa khỏi yêu thích');
         return;
     }
 
