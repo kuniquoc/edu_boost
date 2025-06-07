@@ -13,8 +13,7 @@ let quill
 
 document.addEventListener("DOMContentLoaded", async () => {
     if (!checkRole("ROLE_ADMIN")) {
-        alert("Bạn không có quyền truy cập trang này.");
-        window.location.href = "home.html";
+        window.location.href = "home.html?toastr=error&toastrMessage=Bạn không có quyền truy cập trang này.";
         return;
     }
 
@@ -75,6 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.thumbnail_url = "";
     var thumbnailInput = document.getElementById("thumbnail");
 
+
     thumbnailInput.addEventListener("change", async function () {  // Sử dụng async ở đây
         var thumbnail = thumbnailInput.files[0];
 
@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const url = await response.text();
                 window.thumbnail_url = url;
                 document.getElementById("thumbnail-preview").src = window.thumbnail_url;
+                isUploaded = true;
             } catch (error) {
                 console.error("Có lỗi xảy ra:", error);
             }
@@ -165,6 +166,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     const id = urlParams.get('id');
 
     await fetchStudyMethod(id);
+
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    const toastrState = new URLSearchParams(window.location.search).get("toastr");
+    if (toastrState) {
+        const toastrMessage = new URLSearchParams(window.location.search).get("toastrMessage");
+        if (toastrState === "success") {
+            toastr.success(toastrMessage);
+        } else if (toastrState === "error") {
+            toastr.error(toastrMessage);
+        }
+    }
 });
 
 
@@ -198,13 +227,14 @@ async function fetchStudyMethod(id) {
             document.getElementById("typeId").value = studyMethod.typeId;
             quill.root.innerHTML = studyMethod.detail;
         } else {
-            alert("Không tìm thấy phương pháp học.");
-            window.location.href = "home.html";
+            window.location.href = "home.html?toastr=error&toastrMessage=Không tìm thấy phương pháp học.";
         }
     } catch (error) {
         console.error("Lỗi:", error);
-        alert("Có lỗi xảy ra khi kết nối.");
-        window.history.back();
+        toastr.error("Có lỗi xảy ra khi kết nối.");
+        setTimeout(() => {
+            window.history.back();
+        }, 2000);
     }
 }
 

@@ -2,6 +2,7 @@ import {
     API_BASE_URL,
     addLoginModal,
     addRegisterModal,
+    formatDateToYYYYMMDD,
 } from "../global.js";
 
 import { loadHeader, showDashboard, hideDashboard } from "./header.js";
@@ -87,10 +88,15 @@ document.addEventListener("DOMContentLoaded", () => {
     userInfoForm.addEventListener("submit", (event) => {
         event.preventDefault();
 
+        function removeVerified(text) {
+            const suffix = " (Đã xác thực)";
+            return text.endsWith(suffix) ? text.slice(0, -suffix.length) : text;
+        }
+
         const updatedInfo = {
             fullName: userInfoForm.fullName.value,
             birthday: userInfoForm.birthday.value,
-            email: userInfoForm.email.value,
+            email: removeVerified(userInfoForm.email.value),
             phone: userInfoForm.phone.value,
             gender: userInfoForm.gender.value,
         };
@@ -105,10 +111,12 @@ document.addEventListener("DOMContentLoaded", () => {
         })
             .then(response => {
                 if (!response.ok) throw new Error("Không thể cập nhật thông tin.");
-                alert("Thông tin đã được cập nhật thành công!");
-                window.location.reload();
+                toastr.success("Thông tin đã được cập nhật thành công!");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             })
-            .catch(error => alert(error.message));
+            .catch(error => toastr.error(error.message));
     });
 
     // Submit updated password
@@ -116,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         const updatedInfo = {
-            currentPassword: passwordForm.currentPassword.value,
+            oldPassword: passwordForm.currentPassword.value,
             newPassword: passwordForm.newPassword.value
         };
 
@@ -130,10 +138,38 @@ document.addEventListener("DOMContentLoaded", () => {
         })
             .then(response => {
                 if (!response.ok) throw new Error("Không thể đổi mật khẩu.");
-                alert("Mật khẩu đã được cập nhật thành công!");
+                toastr.success("Mật khẩu đã được cập nhật thành công!");
             })
-            .catch(error => alert(error.message));
+            .catch(error => toastr.error(error.message));
     });
+
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    const toastrState = new URLSearchParams(window.location.search).get("toastr");
+    if (toastrState) {
+        const toastrMessage = new URLSearchParams(window.location.search).get("toastrMessage");
+        if (toastrState === "success") {
+            toastr.success(toastrMessage);
+        } else if (toastrState === "error") {
+            toastr.error(toastrMessage);
+        }
+    }
 });
 
 
@@ -154,12 +190,77 @@ function showUserInfo() {
             return response.json();
         })
         .then(data => {
-            const { fullName, birthday, email, phone, gender } = data.data;
+            const { fullName, birthday, email, phone, gender, emailVerified } = data.data;
             userInfoForm.fullName.value = fullName;
-            userInfoForm.birthday.value = birthday;
+            userInfoForm.birthday.value = formatDateToYYYYMMDD(new Date(birthday));
             userInfoForm.email.value = email;
             userInfoForm.phone.value = phone;
             userInfoForm.gender.value = gender;
+            if (emailVerified === true) {
+                userInfoForm.email.value = email + " (Đã xác thực)";
+                userInfoForm.email.readOnly = true;
+            }
+            else {
+                userInfoForm.email.value = email;
+                const authEmailForm = document.getElementById("authEmailForm");
+                authEmailForm.classList.remove("hidden");
+            }
         })
         .catch(error => console.error(error));
 }
+
+function sendCode() {
+    const token = sessionStorage.getItem("token");
+    const email = document.getElementById("userInfoForm").email.value;
+
+    fetch(API_BASE_URL + "/auth/code-resend", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: email
+    })
+        .then(response => {
+            if (!response.ok) throw new Error("Không thể gửi mã xác thực.");
+            toastr.success("Mã xác thực đã được gửi đến email của bạn.");
+            // Vô hiệu hóa nút và bật lại sau 1 phút
+            const sendCodeButton = document.getElementById("sendAuthEmail");
+            sendCodeButton.disabled = true;
+            setTimeout(() => {
+                sendCodeButton.disabled = false;  // Bật lại nút sau 1 phút
+            }, 60000);  // 60000ms = 1 phút
+        })
+        .catch(error => toastr.error(error.message));
+}
+
+function verifyEmail() {
+    const token = sessionStorage.getItem("token");
+    const code = document.getElementById("authCode").value;
+    const email = document.getElementById("userInfoForm").email.value;
+
+    const emailVerifyData = {
+        code: code,
+        email: email
+    };
+
+    fetch(API_BASE_URL + "/auth/email-verify", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(emailVerifyData)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error("Không thể xác thực email.");
+            toastr.success("Email đã được xác thực thành công.");
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        })
+        .catch(error => toastr.error(error.message));
+}
+
+window.sendCode = sendCode;
+window.verifyEmail = verifyEmail;

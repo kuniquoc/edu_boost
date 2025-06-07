@@ -3,6 +3,7 @@ package quochung.server.service;
 import java.util.Collection;
 import java.time.LocalDate;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import quochung.server.model.User;
@@ -19,15 +20,24 @@ public class UserDetailsImplement implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImplement(User user) {
-        username = user.getUsername();
-        password = user.getPassword();
-        id = user.getId();
-        fullName = user.getFullName();
-        birthday = user.getBirthday();
-        email = user.getEmail();
-        phone = user.getPhone();
-        gender = user.getGender();
-        authorities = user.getAuthorities();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.id = user.getId();
+        this.fullName = user.getFullName();
+        this.birthday = user.getBirthday();
+        this.email = user.getEmail();
+        this.phone = user.getPhone();
+        this.gender = user.getGender();
+
+        // Trực tiếp lấy roles từ userRoles
+        try {
+            this.authorities = user.getUserRoles().stream()
+                    .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getRoleName()))
+                    .toList();
+        } catch (Exception e) {
+            System.out.println("wtf " + e.getMessage());
+        }
+
     }
 
     @Override

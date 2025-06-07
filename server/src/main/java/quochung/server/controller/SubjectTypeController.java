@@ -2,23 +2,21 @@ package quochung.server.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import quochung.server.service.SubjectTypeService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/api/subject-types")
-@Transactional
+@RequiredArgsConstructor
 public class SubjectTypeController {
-    @Autowired
-    private SubjectTypeService subjectTypeService;
+    private final SubjectTypeService subjectTypeService;
 
     @GetMapping
-    public ResponseEntity<?> getMethodName() {
+    public ResponseEntity<Object> getMethodName() {
         var subjectTypes = subjectTypeService.getAllSubjectTypes();
         return ResponseEntity.ok(subjectTypes);
     }

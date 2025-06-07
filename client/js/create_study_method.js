@@ -11,8 +11,7 @@ import { loadHeader, showDashboard, hideDashboard } from "./header.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     if (!checkRole("ROLE_ADMIN")) {
-        alert("Bạn không có quyền truy cập trang này.");
-        window.location.href = "home.html";
+        window.location.href = "home.html?toastr=error&toastrMessage=Bạn không có quyền truy cập trang này.";
         return;
     }
 
@@ -72,6 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Tải hình ảnh lên server
     var thumbnail_url = "";
     var thumbnailInput = document.getElementById("thumbnail");
+    var isUploaded = false;
 
     thumbnailInput.addEventListener("change", async function () {  // Sử dụng async ở đây
         var thumbnail = thumbnailInput.files[0];
@@ -92,6 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const url = await response.text();
                 thumbnail_url = url;
                 document.getElementById("thumbnail-preview").src = thumbnail_url;
+                isUploaded = true;
             } catch (error) {
                 console.error("Có lỗi xảy ra:", error);
             }
@@ -119,6 +120,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("study-method-form").addEventListener("submit", async function (e) {
         e.preventDefault();
 
+        if (!isUploaded) {
+            toastr.error("Vui lòng chọn hình ảnh.");
+            return;
+        }
+
         const name = document.getElementById("name").value;
         const description = document.getElementById("description").value;
         const thumbnail = thumbnail_url;
@@ -141,12 +147,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const result = await response.json();
                 document.getElementById("message").innerText = result.message;
                 document.getElementById("message").style.color = "green";
-                // setTimeout(function () {
-                //     // Import ipcRenderer để gửi thông điệp đến main process
-                //     const { ipcRenderer } = require('electron');
-                //     ipcRenderer.send('load-new-page', 'study_method_detail.html?id=' + result.data.id);
-                // }, 1000);  // 1000ms = 1 giây
-                window.location.href = "study_method_detail.html?id=" + result.data.id;
+
+                window.location.href = "study_method_detail.html?id=" + result.data.id + "&new=failed";
             } else {
                 document.getElementById("message").innerText = "Lỗi khi tạo phương pháp học.";
                 document.getElementById("message").style.color = "red";
@@ -158,6 +160,33 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    const toastrState = new URLSearchParams(window.location.search).get("toastr");
+    if (toastrState) {
+        const toastrMessage = new URLSearchParams(window.location.search).get("toastrMessage");
+        if (toastrState === "success") {
+            toastr.success(toastrMessage);
+        } else if (toastrState === "error") {
+            toastr.error(toastrMessage);
+        }
+    }
 });
 
 

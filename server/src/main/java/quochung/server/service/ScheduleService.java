@@ -2,36 +2,41 @@ package quochung.server.service;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import quochung.server.model.Event;
 import quochung.server.model.Schedule;
-import quochung.server.payload.ScheduleDTO;
-import quochung.server.repository.EventRepository;
-import quochung.server.repository.ScheduleRepository;
-import quochung.server.repository.TodoItemRepository;
+import quochung.server.model.User;
+import quochung.server.payload.schedule.ScheduleDTO;
+import quochung.server.repository.*;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class ScheduleService {
-    @Autowired
-    private ScheduleRepository scheduleRepository;
+    private final ScheduleRepository scheduleRepository;
 
-    @Autowired
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
-    @Autowired
-    private TodoItemRepository todoItemRepository;
+    private final TodoItemRepository todoItemRepository;
 
-    @Autowired
-    private UserDetailsServiceImplement userDetailsService;
+    private final UserRepository userRepository;
+    private final ReminderRepository reminderRepository;
+    private final EventStudyMethodRepository eventStudyMethodRepository;
 
     public ScheduleDTO createSchedule(String name) {
+        Long userId = ((UserDetailsImplement) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng với id: " + userId));
         Schedule schedule = new Schedule();
         schedule.setName(name);
-        schedule.setUser(userDetailsService.getCurrentUser());
+        schedule.setUser(user);
         scheduleRepository.save(schedule);
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         scheduleDTO.setId(schedule.getId());
@@ -52,6 +57,8 @@ public class ScheduleService {
         List<Event> events = schedule.getEvents();
         for (Event event : events) {
             todoItemRepository.deleteByEventId(event.getId());
+            reminderRepository.deleteByEventId(event.getId());
+            eventStudyMethodRepository.deleteByEventId(event.getId());
         }
         eventRepository.deleteByScheduleId(scheduleId);
         scheduleRepository.delete(schedule);

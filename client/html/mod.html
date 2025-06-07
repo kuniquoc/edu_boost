@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Bảng điều khiển admin</title>
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/mod.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+</head>
+
+<body>
+    <header id="header">
+    </header>
+    <!-- Thẻ để thêm loginModal -->
+    <div id="loginModal" class="modal"></div>
+
+    <!-- Thẻ để thêm registerModal -->
+    <div id="registerModal" class="modal"></div>
+
+    <div class="container">
+        <!-- Quản lý phương pháp học -->
+        <div id="manageStudyMethods" class="content-section active">
+            <div class="utility">
+                <button class="add-btn" onclick="window.location.href='create_study_method.html'">Thêm
+                    phương pháp
+                    học</button>
+                <div class="search-and-filter">
+                    <div class="search-bar">
+                        <input type="text" id="searchStudyMethod" class="searchInput" placeholder="Tìm kiếm...">
+                        <button id="searchButton" class="search-btn" onclick="searchStudyMethods()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                                <path
+                                    d="M 21 3 C 11.601563 3 4 10.601563 4 20 C 4 29.398438 11.601563 37 21 37 C 24.355469 37 27.460938 36.015625 30.09375 34.34375 L 42.375 46.625 L 46.625 42.375 L 34.5 30.28125 C 36.679688 27.421875 38 23.878906 38 20 C 38 10.601563 30.398438 3 21 3 Z M 21 7 C 28.199219 7 34 12.800781 34 20 C 34 27.199219 28.199219 33 21 33 C 13.800781 33 8 27.199219 8 20 C 8 12.800781 13.800781 7 21 7 Z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="filter-search">
+                        <select id="typeSelect" class="filter" name="filter">
+                            <option value="0">Tất cả</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên phương pháp</th>
+                        <th>Mô tả</th>
+                        <th>Loại phương pháp</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Thêm các bản ghi phương pháp học khác -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination controls -->
+        <div class="pagination">
+            <button class="page-btn" id="prevPage" disabled>Trước</button>
+            <span id="pageNumber" data-page="1">1</span>
+            <button class="page-btn" id="nextPage">Tiếp</button>
+        </div>
+    </div>
+
+    <script type="module" src="../global.js"></script>
+    <script type="module" src="../js/header.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="../assets/libs/toastr/toastr.min.js"></script>
+    <script src="../assets/js/pages/toastr.init.js"></script>
+    <script type="module" src="../js/mod.js"></script>
+</body>
+
+</html>
