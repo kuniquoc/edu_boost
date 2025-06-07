@@ -1,27 +1,26 @@
 package quochung.server.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
-@Transactional
+@RequiredArgsConstructor
 public class ImageUploadController {
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
 
     @PostMapping("/upload-image")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<Object> uploadImage(@RequestParam("image") MultipartFile image) {
         String apiKey = "c47e98631c8e40908e9a4b53c9a0d6c7"; // API key của bạn
 
         // Sử dụng MultipartBodyBuilder để tạo yêu cầu multipart/form-data
