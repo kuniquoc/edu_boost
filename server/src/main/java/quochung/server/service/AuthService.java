@@ -4,8 +4,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
@@ -17,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.springframework.transaction.annotation.Transactional;
 import quochung.server.payload.auth.CodeVerifyDTO;
 import quochung.server.payload.auth.EmailVerifyDTO;
 import quochung.server.payload.auth.JwtDto;
@@ -27,34 +27,32 @@ import quochung.server.util.JwtUtils;
 import quochung.server.util.RandomStringGenerator;
 import quochung.server.repository.RoleRepository;
 import quochung.server.repository.UserRepository;
+import quochung.server.repository.UserRoleRepository;
 import quochung.server.repository.VerificationCodeRepository;
 import quochung.server.model.Role;
 import quochung.server.model.User;
+import quochung.server.model.UserRole;
 import quochung.server.model.VerificationCode;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class AuthService {
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private EmailUtil emailUtil;
+    private final EmailUtil emailUtil;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    private VerificationCodeRepository verificationCodeRepository;
+    private final VerificationCodeRepository verificationCodeRepository;
 
     public void signUp(SignUpDto signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -65,10 +63,13 @@ public class AuthService {
         user.setUsername(signUpRequest.getUsername());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        Role userRole = roleRepository.findByRoleName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy quyền người dùng"));
+        Role role = roleRepository.findByRoleName("ROLE_USER")
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy quyền người dùng"));
 
-        user.getRoles().add(userRole);
+        UserRole userRole = new UserRole();
+        userRole.setUser(user);
+        userRole.setRole(role);
+        userRoleRepository.save(userRole);
 
         userRepository.save(user);
     }
@@ -112,16 +113,12 @@ public class AuthService {
     }
 
     public void codeResend(String email) throws MessagingException {
-        if (!userRepository.existsByEmail(email)) {
-            throw new UsernameNotFoundException("Không tìm thấy người dùng");
-        }
-        // send code to email
-
         // Tạo mã xác minh ngẫu nhiên
         SecureRandom random = new SecureRandom();
         String code = String.valueOf(random.nextInt(900000) + 100000);
 
         // Tạo đối tượng VerificationCode
+        verificationCodeRepository.deleteByEmail(email);
         VerificationCode verificationCode = new VerificationCode();
         verificationCode.setEmail(email);
         verificationCode.setCode(code);

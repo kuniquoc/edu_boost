@@ -2,16 +2,18 @@ package quochung.server.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import quochung.server.model.SubjectType;
 import quochung.server.repository.SubjectTypeRepository;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class SubjectTypeService {
-    @Autowired
-    private SubjectTypeRepository subjectTypeRepository;
+    private final SubjectTypeRepository subjectTypeRepository;
 
     public List<SubjectType> getAllSubjectTypes() {
         return subjectTypeRepository.findAll();
