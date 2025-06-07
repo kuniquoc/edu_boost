@@ -11,6 +11,7 @@ if (sessionStorage.getItem("headerContent") === null) {
                 <a id="link-schedule" href="schedule.html">Lập lịch</a>
                 <a id="link-study-method" href="study_method.html">Phương pháp học</a>
                 <a id="link-user-profile" href="user_profile.html">Tài khoản</a>
+                <a id="link-mod" href="mod.html" style="display:none;">Quản lý bài đăng</a>
                 <a id="link-dashboard" href="dashboard.html" style="display:none;">Bảng điều khiển</a>
             </div>
         </nav>
@@ -54,6 +55,10 @@ function showDashboard() {
     roles.forEach(role => {
         if (role.authority === "ROLE_ADMIN") {
             document.getElementById("link-dashboard").style.display = "flex";
+            storeHeader();
+            return;
+        } else if (role.authority === "ROLE_MOD") {
+            document.getElementById("link-mod").style.display = "flex";
             storeHeader();
             return;
         }

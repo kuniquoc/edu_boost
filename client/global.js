@@ -261,6 +261,7 @@ function logout() {
     sessionStorage.removeItem("headerContent");
     sessionStorage.removeItem("roles");
     sessionStorage.removeItem("token");
+
 }
 
 //#endregion
@@ -361,7 +362,7 @@ export {
     getSubjectTypes,
     checkRole,
     formatDateToYYYYMMDD,
-    getMonday
+    getMonday,
 }
 
 window.showLoginModal = showLoginModal;
