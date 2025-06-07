@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
     <title>Tài khoản</title>
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/modal.css">
     <link rel="stylesheet" href="../css/user_profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
 
 <body>
@@ -50,8 +52,8 @@
                             <div id="authEmailButton">
                                 <input type="text" id="authCode" name="authCode"
                                     placeholder="Hãy nhập mã xác thực ở đây">
-                                <button type="button" id="sendAuthEmail">Gửi mã xác thực</button>
-                                <button type="button" id="authEmail">Xác thực</button>
+                                <button type="button" id="sendAuthEmail" onclick="sendCode()">Gửi mã xác thực</button>
+                                <button type="button" id="authEmail" onclick="verifyEmail()">Xác thực</button>
                             </div>
                         </div>
                     </div>
@@ -93,6 +95,9 @@
 
     <script type="module" src="../global.js"></script>
     <script type="module" src="../js/header.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="../assets/libs/toastr/toastr.min.js"></script>
+    <script src="../assets/js/pages/toastr.init.js"></script>
     <script type="module" src="../js/user_profile.js"></script>
 </body>
 
