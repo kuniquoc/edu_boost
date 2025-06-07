@@ -26,4 +26,7 @@ public interface StudyMethodRepository extends JpaRepository<StudyMethod, Long> 
 
     Page<StudyMethod> findByNameContainingAndTypeAndIdInIgnoreCase(String name, SubjectType type, List<Long> ids,
             Pageable pageable);
+
+    List<StudyMethod> findByUserId(Long userId);
+    void deleteByUserId(Long userId);
 }

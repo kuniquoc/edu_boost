@@ -3,16 +3,18 @@ import {
     addLoginModal,
     addRegisterModal,
     getSubjectTypes,
-    checkRole
+    checkRole,
+
+    formatDateToYYYYMMDD
 } from "../global.js";
 
 import { loadHeader, showDashboard, hideDashboard } from "./header.js";
 
+
 document.addEventListener("DOMContentLoaded", async () => {
     if (!await checkRole("ROLE_ADMIN")) {
         document.body.innerHTML = "";
-        alert("Bạn không có quyền truy cập trang này.");
-        window.location.href = "home.html";
+        window.location.href = "home.html?toastr=error&toastrMessage=Bạn không có quyền truy cập trang này.";
         return;
     }
 
@@ -144,13 +146,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    const toastrState = new URLSearchParams(window.location.search).get("toastr");
+    if (toastrState) {
+        const toastrMessage = new URLSearchParams(window.location.search).get("toastrMessage");
+        if (toastrState === "success") {
+            toastr.success(toastrMessage);
+        } else if (toastrState === "error") {
+            toastr.error(toastrMessage);
+        }
+    }
+
 
 });
 
 
 async function fetchRoles() {
     const token = sessionStorage.getItem("token");
-    const response = await fetch(API_BASE_URL + "/users/roles", {
+    const response = await fetch(API_BASE_URL + "/admin/users/roles", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -163,6 +193,11 @@ async function fetchRoles() {
     const roles = data.data
 
     const roleSelect = document.getElementById("roleSelect");
+    roleSelect.innerHTML = "";
+    const defaultOption = document.createElement("option");
+    defaultOption.value = 0;
+    defaultOption.text = "Tất cả";
+    roleSelect.appendChild(defaultOption);
     roles.forEach(role => {
         const option = document.createElement("option");
         option.value = role.id;
@@ -175,7 +210,11 @@ async function fetchTypes() {
     const types = await getSubjectTypes();
 
     const typeSelect = document.getElementById("typeSelect");
-
+    typeSelect.innerHTML = "";
+    const defaultOption = document.createElement("option");
+    defaultOption.value = 0;
+    defaultOption.text = "Tất cả";
+    typeSelect.appendChild(defaultOption);
     types.entries().forEach(([key, value]) => {
         const option = document.createElement("option");
         option.value = key
@@ -184,73 +223,199 @@ async function fetchTypes() {
     });
 }
 
-function fetchUsers() {
-    const token = sessionStorage.getItem("token");
-    const manageUsersTableBody = document.querySelector("#manageUsers table tbody");
+async function fetchUsers() {
+    try {
+        const manageUsersTableBody = document.querySelector("#manageUsers table tbody");
 
-    // Fetch user profile data
-    fetch(API_BASE_URL + "/users", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+            return;
         }
-    })
-        .then(response => {
-            if (!response.ok) throw new Error("Không thể tải thông tin các người dùng.");
-            return response.json();
-        })
-        .then(response => {
-            // Xóa nội dung cũ trong bảng
-            manageUsersTableBody.innerHTML = "";
 
-            // Thêm dữ liệu người dùng vào bảng
-            response.data.forEach(user => {
-                const row = document.createElement("tr");
+        const page = new URLSearchParams(window.location.search).get('page') || 1;
+        const roleId = new URLSearchParams(window.location.search).get('roleId') || 0;
+        document.getElementById("roleSelect").value = roleId;
+        const search = new URLSearchParams(window.location.search).get('search') || '';
+        document.getElementById("searchUser").value = search;
 
-                row.innerHTML = `
-                    <td>${user.id}</td>
-                    <td>${user.fullName}</td>
-                    <td>${user.birthday}</td>
-                    <td>${user.email}</td>
-                    <td>${user.phone}</td>
-                    <td>${user.gender}</td>
-                    <td>${user.roles.map(role => `${role.roleName}`).join(",")}</td>
-                    <td>
-                        <button class="view-btn" data-id="${user.id}">
-                            <i class="fas fa-eye"></i> <!-- Biểu tượng Xem -->
-                        </button>
-                        <button class="edit-btn" data-id="${user.id}">
-                            <i class="fas fa-edit"></i> <!-- Biểu tượng Chỉnh sửa -->
-                        </button>
-                        <button class="delete-btn" data-id="${user.id}">
-                            <i class="fas fa-trash"></i> <!-- Biểu tượng Xoá -->
-                        </button>
-                    </td>
-                `;
+        // Fetch user profile data
+        const response = await fetch(API_BASE_URL + `/admin/users?page=${page}&roleId=${roleId}&search=${search}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
 
-                // Thêm sự kiện cho các nút (nếu cần)
-                row.querySelector(".view-btn").addEventListener("click", () => viewUser(user.id));
-                row.querySelector(".edit-btn").addEventListener("click", () => editUser(user.id));
-                row.querySelector(".delete-btn").addEventListener("click", () => deleteUser(user.id));
+        if (!response.ok) throw new Error("Không thể tải thông tin các người dùng.");
 
-                manageUsersTableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error(error));
+        const data = await response.json();
+
+        // Update pagination
+        updatePagination(data.data.currentPage, data.data.totalPages);
+
+        // Xóa nội dung cũ trong bảng
+        manageUsersTableBody.innerHTML = "";
+
+        // Thêm dữ liệu người dùng vào bảng
+        data.data.userElementDTOs.forEach(user => {
+            const row = document.createElement("tr");
+            const birthdayString = formatDateToYYYYMMDD(new Date(user.birthday));
+
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.fullName}</td>
+                <td>${birthdayString}</td>
+                <td>${user.email}</td>
+                <td>${user.phone}</td>
+                <td>${user.gender}</td>
+                <td>${user.roles.map(role => `${role.roleName}`).join(",")}</td>
+                <td>
+                    <button class="edit-btn" data-id="${user.id}">
+                        <i class="fas fa-edit"></i> <!-- Biểu tượng Chỉnh sửa -->
+                    </button>
+                    <button class="delete-btn" data-id="${user.id}">
+                        <i class="fas fa-trash"></i> <!-- Biểu tượng Xoá -->
+                    </button>
+                </td>
+            `;
+
+            // Thêm sự kiện cho các nút (nếu cần)
+            row.querySelector(".edit-btn").addEventListener("click", () => editUser(user.id));
+            row.querySelector(".delete-btn").addEventListener("click", () => deleteUser(user.id));
+
+            manageUsersTableBody.appendChild(row);
+        });
+    }
+    catch (error) {
+        console.error(error);
+    }
+
 }
 
 // Các hàm hỗ trợ cho sự kiện nút
-function viewUser(userId) {
-    alert("Xem thông tin người dùng với ID:" + userId);
+async function editUser(userId) {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+        return;
+    }
+    showRoleModal(userId);
 }
 
-function editUser(userId) {
-    alert("Chỉnh sửa thông tin người dùng với ID:" + userId);
+async function showRoleModal(userId) {
+    document.getElementById("roleModal").style.display = "block";
+    const token = sessionStorage.getItem("token");
+
+    document.getElementById("roleModal").onclick = function (event) {
+        if (event.target === document.getElementById("roleModal")) {
+            document.getElementById("roleModal").style.display = "none";
+        }
+    }
+
+    // Xóa nội dung cũ tránh lặp lại khi mở nhiều lần
+    const rolesList = document.getElementById("roles");
+    rolesList.innerHTML = "";
+
+    try {
+        // Gọi API lấy danh sách roles
+        const response = await fetch(API_BASE_URL + `/admin/users/roles`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!response.ok) throw new Error("Không thể tải thông tin các vai trò.");
+
+        const data = await response.json();
+        const roles = data.data;
+
+        const userResponse = await fetch(API_BASE_URL + `/admin/users/${userId}/role`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!userResponse.ok) throw new Error("Không thể tải thông tin người dùng.");
+        const userData = await userResponse.json();
+        const userRoles = userData.data;
+
+        // Hiển thị danh sách role
+        roles.forEach(role => {
+            const roleElement = document.createElement("div");
+            roleElement.innerHTML = `
+                <div class='role'>
+                    <label for="role-${role.id}">${role.roleName}</label>
+                    <input type="checkbox" id="role-${role.id}" value="${role.id}" data-role-name="${role.roleName}">
+                </div>
+            `;
+            rolesList.appendChild(roleElement);
+            if (userRoles.some(userRole => userRole.id === role.id)) {
+                roleElement.querySelector("input").checked = true;
+            }
+        });
+
+    } catch (error) {
+        console.error(error);
+        toastr.error("Có lỗi xảy ra khi tải thông tin vai trò.");
+        return;
+    }
+
+    // Gán sự kiện chỉ một lần, tránh trùng lặp sự kiện khi mở modal nhiều lần
+    const submitButton = document.getElementById("submit-role");
+    submitButton.onclick = async () => {
+        const checkedRoles = document.querySelectorAll("#roles input:checked");
+
+        // Tạo array chứa cả id và roleName
+        const selectedRoles = Array.from(checkedRoles).map(role => ({
+            id: role.value,
+            roleName: role.getAttribute("data-role-name")
+        }));
+
+        try {
+            const response = await fetch(API_BASE_URL + `/admin/users/${userId}/role`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(selectedRoles)
+            });
+
+            if (!response.ok) throw new Error("Không thể cập nhật vai trò.");
+
+            document.getElementById("roleModal").style.display = "none";
+            toastr.success("Cập nhật vai trò thành công.");
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+
+        } catch (error) {
+            console.log(error);
+            toastr.error("Có lỗi xảy ra khi cập nhật vai trò.");
+        }
+    };
 }
+
 
 function deleteUser(userId) {
-    alert("Xóa người dùng với ID:" + userId);
+    if (confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
+        const token = sessionStorage.getItem("token");
+        fetch(API_BASE_URL + `/admin/users/${userId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Không thể xóa người dùng.");
+                toastr.success("Xóa người dùng thành công.");
+                fetchUsers();
+            })
+            .catch(error => console.error(error));
+    }
 }
 
 async function fetchStudyMethods() {
@@ -290,7 +455,7 @@ async function fetchStudyMethods() {
         const subjectTypes = await getSubjectTypes();
 
         // Thêm dữ liệu người dùng vào bảng
-        data.data.studyMethodElementDtos.forEach(study_method => {
+        data.data.studyMethodElementDTOs.forEach(study_method => {
             const row = document.createElement("tr");
 
             row.innerHTML = `
@@ -332,17 +497,17 @@ function editStudyMethod(smId) {
     window.location.href = `update_study_method.html?id=${smId}`;
 }
 
-function deleteStudyMethod(smId) {
+async function deleteStudyMethod(smId) {
     if (confirm("Bạn có chắc chắn muốn xóa phương pháp học này không?")) {
         const token = sessionStorage.getItem("token");
-        const response = fetch(API_BASE_URL + `/study-methods/${smId}`, {
+        const response = await fetch(API_BASE_URL + `/study-methods/${smId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             }
         });
-        alert("Xóa phương pháp học thành công.");
+        toastr.success("Xóa phương pháp học thành công.");
         fetchStudyMethods();
     }
 }

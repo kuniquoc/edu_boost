@@ -10,7 +10,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-
 public class LocalTimeDeserializer extends StdDeserializer<LocalTime> {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 

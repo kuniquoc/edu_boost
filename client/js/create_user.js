@@ -11,8 +11,7 @@ import { loadHeader, showDashboard, hideDashboard } from "./header.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     if (!checkRole("ROLE_ADMIN")) {
-        alert("Bạn không có quyền truy cập trang này.");
-        window.location.href = "home.html";
+        window.location.href = "home.html?toastr=error&toastrMessage=Bạn không có quyền truy cập trang này.";
         return;
     }
 
@@ -101,18 +100,45 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             if (response.status === 201) {
-                alert("Tạo người dùng thành công.");
-                window.history.back();
+                toastr.success("Tạo người dùng thành công.");
+                setTimeout(() => {
+                    window.history.back();
+                }, 2000); // Chờ 2 giây trước khi quay lại
             } else {
-                alert("Tạo người dùng thất bại. " + result.message);
+                toastr.error("Tạo người dùng thất bại. " + result.message);
             }
         } catch (error) {
             console.error("Lỗi: ", error);
         }
     });
 
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
 
-
+    const toastrState = new URLSearchParams(window.location.search).get("toastr");
+    if (toastrState) {
+        const toastrMessage = new URLSearchParams(window.location.search).get("toastrMessage");
+        if (toastrState === "success") {
+            toastr.success(toastrMessage);
+        } else if (toastrState === "error") {
+            toastr.error(toastrMessage);
+        }
+    }
 });
 
 

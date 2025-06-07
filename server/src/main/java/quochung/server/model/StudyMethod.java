@@ -1,6 +1,7 @@
 package quochung.server.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "study_methods")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class StudyMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +17,7 @@ public class StudyMethod {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String thumbnail;
@@ -25,4 +28,8 @@ public class StudyMethod {
 
     @Column(columnDefinition = "TEXT")
     private String detail;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

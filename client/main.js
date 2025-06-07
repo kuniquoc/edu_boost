@@ -8,8 +8,8 @@ function createWindow() {
         height: 1080,
         fullscreenable: true,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
+            nodeIntegration: false,
+            contextIsolation: true,
         },
     });
 
