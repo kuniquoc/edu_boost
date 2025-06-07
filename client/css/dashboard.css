@@ -241,3 +241,39 @@ table tr:hover {
     border-radius: 10px;
     font-weight: bold;
 }
+
+.modal-content h2 {
+    justify-self: center;
+    font-size: 2em;
+}
+
+
+#roleForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#roles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.role {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#roleForm button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #1abc9c;
+}
