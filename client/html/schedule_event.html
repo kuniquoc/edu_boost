@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
     <title>Lịch trình</title>
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/modal.css">
     <link rel="stylesheet" href="../css/schedule_event.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
 
 <body>
@@ -23,9 +25,6 @@
     <!-- Thẻ  studyMethodModal -->
     <div id="studyMethodModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <button class="add-btn" onclick="window.location.href='create_study_method.html'">Thêm phương pháp
-                học</button>
             <div class="search-and-filter">
                 <div class="search-bar">
                     <input type="text" id="searchInput" placeholder="Tìm kiếm...">
@@ -40,13 +39,17 @@
 
                 <div class="filter-search">
                     <select id="filter" name="filter">
-                        <option value="all">Tất cả</option>
+                        <option value="0">Tất cả</option>
 
                     </select>
                 </div>
-                <input type="checkbox" id="searchFavorite" name="searchFavorite">
+
+                <div class="search-favorite">
+                    <label for="searchFavorite">Yêu thích</label>
+                    <input type="checkbox" id="searchFavorite" name="searchFavorite">
+                </div>
             </div>
-            <table>
+            <table id="studyMethodTable">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -60,6 +63,11 @@
                     <!-- Thêm các bản ghi phương pháp học khác -->
                 </tbody>
             </table>
+            <div class="pagination">
+                <button class="page-btn" id="prevPage" disabled>Trước</button>
+                <span id="pageNumber" data-page="1">1</span>
+                <button class="page-btn" id="nextPage">Tiếp</button>
+            </div>
         </div>
     </div>
 
@@ -83,45 +91,34 @@
             <textarea id="eventDescription" class="editable-input"
                 rows="5">Học các bài tập giải phương trình bậc 2</textarea>
 
-            <label for="reminder">Nhắc nhở:</label>
-            <select id="reminder" class="editable-input" name="reminder">
-                <option value="0">Không</option>
-                <option value="5">Trước 10 phút</option>
-                <option value="10">Trước 30 phút</option>
-                <option value="15">Trước 1 tiếng</option>
-                <option value="30" selected>Trước 2 tiếng</option>
-                <option value="60">Trước 1 ngày</option>
-            </select>
             <div id="event-button">
                 <button class="save-event" onclick="saveEvent()">Lưu</button>
                 <button class="delete-event" onclick="deleteEvent()">Xoá</button>
             </div>
         </div>
+
+        <div class="middle-section">
+            <div class="reminder-list">
+                <div id="reminderListHeader">
+                    <label>Đặt nhắc nhở:</label>
+                    <button class="add-reminder-btn" onclick="addReminder(0)">Thêm</button>
+                </div>
+                <ul id="reminderList">
+                    <!-- Thêm các bản ghi nhắc nhở khác -->
+                </ul>
+            </div>
+        </div>
+
+
         <!-- Phần bên phải: To-Do List -->
         <div class="right-section">
             <div class="todo-list">
                 <div id="todoListHeader">
                     <label>Công việc cần làm:</label>
-                    <button class="add-todo-btn" onclick="addTodo()">Thêm</button>
+                    <button class="add-todo-btn" onclick="addTodo(0)">Thêm</button>
                 </div>
                 <ul id="todoList">
-                    <li data-id="1" data-is-completed="false">
-                        <input type="text" class="todo-list-item" value="Chuẩn bị tài liệu học tập">
-                        <button class="done-btn" onclick="markAsDone(this)">Đã xong</button>
-                        <button class="delete-btn" onclick="deleteTodo(this)">Xóa</button>
-                    </li>
-
-                    <li data-id="2" data-completed="false">
-                        <input type="text" class="todo-list-item"
-                            value="Kiểm tra kết nối internet và các công cụ học online">
-                        <button class="done-btn" onclick="markAsDone(this)">Đã xong</button>
-                        <button class="delete-btn" onclick="deleteTodo(this)">Xóa</button>
-                    </li>
-                    <li data-id="3" data-completed="false">
-                        <input type="text" class="todo-list-item" value="Soạn sẵn các câu hỏi để thảo luận trong lớp">
-                        <button class="done-btn" onclick="markAsDone(this)">Đã xong</button>
-                        <button class="delete-btn" onclick="deleteTodo(this)">Xóa</button>
-                    </li>
+                    <!-- Thêm các bản ghi công việc khác -->
                 </ul>
 
             </div>
@@ -129,33 +126,23 @@
             <div class="method-list">
                 <div id="methodListHeader">
                     <label>Phương pháp hỗ trợ:</label>
-                    <button class="add-method-btn" onclick="addMethod()">Thêm</button>
+                    <button class="add-method-btn" onclick="showStudyMethodModal()">Thêm</button>
                 </div>
                 <ul id="methodList">
-                    <li data-id="1">
-                        <span class="method-link"><a href="study_method_detail.html?id=1">Kĩ thuật Pomodoro: Phương pháp
-                                quản lý thời gian với các phiên làm việc 25 phút.</a></span>
-                        <button class="delete-btn" onclick="deleteMethod(this)">Xóa</button>
-                    </li>
-                    <li data-id="2">
-                        <span class="method-link"><a href="study_method_detail.html?id=2">Active Recall: Kỹ thuật ôn tập
-                                thông qua việc chủ động nhớ lại thông tin.</a></span>
-                        <button class="delete-btn" onclick="deleteMethod(this)">Xóa</button>
-                    </li>
-                    <li data-id="3">
-                        <span class="method-link"><a href="study_method_detail.html?id=3">Lặp lại ngắt quảng: Kỹ thuật
-                                học tập giúp tối ưu hóa việc ghi nhớ bằng cách giãn cách thời gian ôn tập.</a></span>
-                        <button class="delete-btn" onclick="deleteMethod(this)">Xóa</button>
-                    </li>
+                    <!-- Thêm các bản ghi phương pháp học khác -->
                 </ul>
 
             </div>
+
         </div>
     </div>
 
 
     <script type="module" src="../global.js"></script>
     <script type="module" src="../js/header.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="../assets/libs/toastr/toastr.min.js"></script>
+    <script src="../assets/js/pages/toastr.init.js"></script>
     <script type="module" src="../js/schedule_event.js"></script>
 </body>
 

@@ -122,6 +122,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Gắn sự kiện click vào events-grid
     const eventsGrid = document.querySelector('.events-grid');
     eventsGrid.addEventListener('click', addEvent);
+
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    const toastrState = new URLSearchParams(window.location.search).get("toastr");
+    if (toastrState) {
+        const toastrMessage = new URLSearchParams(window.location.search).get("toastrMessage");
+        if (toastrState === "success") {
+            toastr.success(toastrMessage);
+        } else if (toastrState === "error") {
+            toastr.error(toastrMessage);
+        }
+    }
 });
 
 function showListSchedule() {
@@ -188,18 +216,20 @@ function addSchedule() {
                 });
 
                 if (response.ok) {
-                    alert("Lịch trình đã được tạo thành công!");
-                    window.location.reload();
+                    toastr.success("Lịch trình đã được tạo thành công!");
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 } else {
-                    alert("Đã xảy ra lỗi khi tạo lịch trình.");
+                    toastr.error("Đã xảy ra lỗi khi tạo lịch trình.");
                 }
             } catch (error) {
-                alert("Lỗi kết nối đến máy chủ.");
+                toastr.error("Lỗi kết nối đến máy chủ.");
             } finally {
                 modal.style.display = "none"; // Close the modal
             }
         } else {
-            alert("Vui lòng nhập tên lịch trình.");
+            toastr.error("Vui lòng nhập tên lịch trình.");
         }
     });
 }
@@ -251,18 +281,20 @@ function updateSchedule(scheduleId) {
                 });
 
                 if (response.ok) {
-                    alert("Lịch trình đã được cập nhật thành công!");
-                    window.location.reload();
+                    toastr.success("Lịch trình đã được cập nhật thành công!");
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 } else {
-                    alert("Đã xảy ra lỗi khi cập nhật lịch trình.");
+                    toastr.error("Đã xảy ra lỗi khi cập nhật lịch trình.");
                 }
             } catch (error) {
-                alert("Lỗi kết nối đến máy chủ.");
+                toastr.error("Lỗi kết nối đến máy chủ.");
             } finally {
                 modal.style.display = "none"; // Close the modal
             }
         } else {
-            alert("Vui lòng nhập tên lịch trình.");
+            toastr.error("Vui lòng nhập tên lịch trình.");
         }
     });
 }
@@ -331,15 +363,13 @@ function deleteSchedule(scheduleId) {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-
-            if (response.ok) {
-                alert('Lịch trình đã được xóa thành công!');
+            toastr.success("Lịch trình đã được xóa thành công!");
+            setTimeout(() => {
                 window.location.reload();
-            } else {
-                alert('Đã xảy ra lỗi khi xóa lịch trình.');
-            }
+            }, 2000);
         } catch (error) {
-            alert('Lỗi kết nối đến máy chủ.');
+            console.error('Lỗi:', error);
+            toastr.error("Đã xảy ra lỗi khi xóa lịch trình.");
         }
     }
 }
@@ -396,7 +426,9 @@ async function fetchAndDisplaySchedules() {
             const dayDiv = document.createElement('div');
             dayDiv.className = 'group-event-day';
             if (schedule.startDate && schedule.endDate) {
-                dayDiv.textContent = `${schedule.startDate} đến ${schedule.endDate}`; // Giả sử API trả về 'startDate' và 'endDate'
+                const startDateString = formatDateToYYYYMMDD(new Date(schedule.startDate));
+                const endDateString = formatDateToYYYYMMDD(new Date(schedule.endDate));
+                dayDiv.textContent = `${startDateString} đến ${endDateString}`; // Giả sử API trả về 'startDate' và 'endDate'
             }
             else {
                 dayDiv.textContent = '';
@@ -480,8 +512,10 @@ function displayEvent(event) {
         window.location.href = `schedule_event.html?eventId=${event.id}`;
     }
 
-    const startTimeMinutes = timeToMinutes(event.startTime);
-    const endTimeMinutes = timeToMinutes(event.endTime);
+    const startTimeString = `${event.startTime[0].toString().padStart(2, '0')}:${event.startTime[1].toString().padStart(2, '0')}`;
+    const endTimeString = `${event.endTime[0].toString().padStart(2, '0')}:${event.endTime[1].toString().padStart(2, '0')}`;
+    const startTimeMinutes = timeToMinutes(startTimeString);
+    const endTimeMinutes = timeToMinutes(endTimeString);
     const durationMinutes = endTimeMinutes - startTimeMinutes;
 
     if (durationMinutes <= 0) {
@@ -499,7 +533,7 @@ function displayEvent(event) {
 
     const eventTime = document.createElement('div');
     eventTime.classList.add('event-time');
-    eventTime.textContent = `${event.startTime} - ${event.endTime}`; // Hiển thị thời gian bắt đầu và kết thúc
+    eventTime.textContent = `${startTimeString} - ${endTimeString}`; // Hiển thị thời gian bắt đầu và kết thúc
 
     eventElement.appendChild(eventSubject);
     eventElement.appendChild(eventTime);
@@ -520,7 +554,7 @@ async function fetchScheduleData(scheduleId, startDate) {
     });
 
     try {
-        const response = await fetch(API_BASE_URL + `/events/${scheduleId}?startDate=${startDate}`, {
+        const response = await fetch(API_BASE_URL + `/schedules/${scheduleId}?startDate=${startDate}`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -598,7 +632,7 @@ function addEvent(event) {
             .catch(error => {
                 console.error('Lỗi:', error);
                 // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi cho người dùng
-                alert('Đã xảy ra lỗi khi thêm sự kiện.');
+                toastr.error('Đã xảy ra lỗi khi thêm sự kiện.');
             });
     });
 }
