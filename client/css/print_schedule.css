@@ -1,0 +1,150 @@
+:root {
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --background: #ffffff;
+    --foreground: #020817;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --border: #e2e8f0;
+    --dark-border: #000000;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+}
+
+/* Xóa margin mặc định */
+.print-container {
+    width: 100%;
+    /* Chiếm toàn bộ chiều rộng của cửa sổ in */
+    box-sizing: border-box;
+    /* Bao gồm padding và border trong width */
+    padding: 20px;
+    /* Thêm padding cho nội dung */
+}
+
+.print-title {
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background-color: #2c3e50;
+    color: #e2e8f0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+}
+
+h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+}
+
+.calendar-grid {
+    height: calc(100% - 80px);
+    flex-grow: 1;
+    overflow-x: auto;
+}
+
+.calendar-header {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-left: 50px;
+    height: 80px;
+}
+
+.calendar-header-cell {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.calendar-day {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.calendar-date {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.calendar-body {
+    position: relative;
+    height: calc(100% - 80px);
+}
+
+.time-column {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    height: 500px;
+    border-right: 1px solid var(--border);
+    z-index: 10;
+}
+
+.time-slot {
+    height: 35px;
+    width: 50px;
+    text-align: center;
+    color: var(--muted-foreground);
+    border: 1px solid var(--border);
+}
+
+.events-grid {
+    margin-left: 50px;
+    display: flex;
+    flex-direction: row;
+}
+
+.events-column {
+    position: relative;
+    height: calc(24*35px);
+    border: 1px solid var(--border);
+    /* 24 hours * 60px per hour */
+}
+
+.event {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    padding: 0.25rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    overflow: hidden;
+    z-index: 20;
+    cursor: pointer;
+}
+
+.event-subject {
+    font-size: 0.875rem;
+}
+
+.event-time {
+    font-size: 0.675rem;
+    opacity: 0.8;
+}
+
+/* Loại bỏ margin của trang in */
+@page {
+    size: auto;
+    margin: 0mm;
+}

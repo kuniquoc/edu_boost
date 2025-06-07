@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
+    <title>Lịch trình</title>
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/schedule_event.css">
+</head>
+
+<body>
+    <header id="header"></header>
+    <!-- Thẻ để thêm loginModal -->
+    <div id="loginModal" class="modal"></div>
+
+    <!-- Thẻ để thêm registerModal -->
+    <div id="registerModal" class="modal"></div>
+
+    <!-- Thẻ  studyMethodModal -->
+    <div id="studyMethodModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <button class="add-btn" onclick="window.location.href='create_study_method.html'">Thêm phương pháp
+                học</button>
+            <div class="search-and-filter">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm...">
+                    <button id="searchButton" class="search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                            <path
+                                d="M 21 3 C 11.601563 3 4 10.601563 4 20 C 4 29.398438 11.601563 37 21 37 C 24.355469 37 27.460938 36.015625 30.09375 34.34375 L 42.375 46.625 L 46.625 42.375 L 34.5 30.28125 C 36.679688 27.421875 38 23.878906 38 20 C 38 10.601563 30.398438 3 21 3 Z M 21 7 C 28.199219 7 34 12.800781 34 20 C 34 27.199219 28.199219 33 21 33 C 13.800781 33 8 27.199219 8 20 C 8 12.800781 13.800781 7 21 7 Z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="filter-search">
+                    <select id="filter" name="filter">
+                        <option value="all">Tất cả</option>
+
+                    </select>
+                </div>
+                <input type="checkbox" id="searchFavorite" name="searchFavorite">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên phương pháp</th>
+                        <th>Mô tả</th>
+                        <th>Loại phương pháp</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Thêm các bản ghi phương pháp học khác -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <!-- Phần bên trái: Thông tin sự kiện -->
+        <div class="left-section">
+            <label for="eventTitle">Tên sự kiện:</label>
+            <input type="text" id="eventTitle" class="editable-input" value="Học Toán">
+
+            <label for="eventTime">Ngày diễn ra:</label>
+            <input type="date" id="eventDate" class="editable-input" value="2025-01-01">
+
+            <label for="eventTime">Thời gian bắt đầu:</label>
+            <input type="time" id="eventStartTime" class="editable-input" value="08:00">
+
+            <label for="eventTime">Thời gian kết thúc:</label>
+            <input type="time" id="eventEndTime" class="editable-input" value="10:00">
+
+            <label for="eventDescription">Mô tả sự kiện:</label>
+            <textarea id="eventDescription" class="editable-input"
+                rows="5">Học các bài tập giải phương trình bậc 2</textarea>
+
+            <label for="reminder">Nhắc nhở:</label>
+            <select id="reminder" class="editable-input" name="reminder">
+                <option value="0">Không</option>
+                <option value="5">Trước 10 phút</option>
+                <option value="10">Trước 30 phút</option>
+                <option value="15">Trước 1 tiếng</option>
+                <option value="30" selected>Trước 2 tiếng</option>
+                <option value="60">Trước 1 ngày</option>
+            </select>
+            <div id="event-button">
+                <button class="save-event" onclick="saveEvent()">Lưu</button>
+                <button class="delete-event" onclick="deleteEvent()">Xoá</button>
+            </div>
+        </div>
+        <!-- Phần bên phải: To-Do List -->
+        <div class="right-section">
+            <div class="todo-list">
+                <div id="todoListHeader">
+                    <label>Công việc cần làm:</label>
+                    <button class="add-todo-btn" onclick="addTodo()">Thêm</button>
+                </div>
+                <ul id="todoList">
+                    <li data-id="1" data-is-completed="false">
+                        <input type="text" class="todo-list-item" value="Chuẩn bị tài liệu học tập">
+                        <button class="done-btn" onclick="markAsDone(this)">Đã xong</button>
+                        <button class="delete-btn" onclick="deleteTodo(this)">Xóa</button>
+                    </li>
+
+                    <li data-id="2" data-completed="false">
+                        <input type="text" class="todo-list-item"
+                            value="Kiểm tra kết nối internet và các công cụ học online">
+                        <button class="done-btn" onclick="markAsDone(this)">Đã xong</button>
+                        <button class="delete-btn" onclick="deleteTodo(this)">Xóa</button>
+                    </li>
+                    <li data-id="3" data-completed="false">
+                        <input type="text" class="todo-list-item" value="Soạn sẵn các câu hỏi để thảo luận trong lớp">
+                        <button class="done-btn" onclick="markAsDone(this)">Đã xong</button>
+                        <button class="delete-btn" onclick="deleteTodo(this)">Xóa</button>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="method-list">
+                <div id="methodListHeader">
+                    <label>Phương pháp hỗ trợ:</label>
+                    <button class="add-method-btn" onclick="addMethod()">Thêm</button>
+                </div>
+                <ul id="methodList">
+                    <li data-id="1">
+                        <span class="method-link"><a href="study_method_detail.html?id=1">Kĩ thuật Pomodoro: Phương pháp
+                                quản lý thời gian với các phiên làm việc 25 phút.</a></span>
+                        <button class="delete-btn" onclick="deleteMethod(this)">Xóa</button>
+                    </li>
+                    <li data-id="2">
+                        <span class="method-link"><a href="study_method_detail.html?id=2">Active Recall: Kỹ thuật ôn tập
+                                thông qua việc chủ động nhớ lại thông tin.</a></span>
+                        <button class="delete-btn" onclick="deleteMethod(this)">Xóa</button>
+                    </li>
+                    <li data-id="3">
+                        <span class="method-link"><a href="study_method_detail.html?id=3">Lặp lại ngắt quảng: Kỹ thuật
+                                học tập giúp tối ưu hóa việc ghi nhớ bằng cách giãn cách thời gian ôn tập.</a></span>
+                        <button class="delete-btn" onclick="deleteMethod(this)">Xóa</button>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module" src="../global.js"></script>
+    <script type="module" src="../js/header.js"></script>
+    <script type="module" src="../js/schedule_event.js"></script>
+</body>
+
+</html>

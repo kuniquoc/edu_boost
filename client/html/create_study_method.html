@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
+    <title>Thêm phương pháp học</title>
+    <!-- Thêm CSS của Quill -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/create_study_method.css">
+</head>
+
+<body>
+    <header id="header">
+    </header>
+    <!-- Thẻ để thêm loginModal -->
+    <div id="loginModal" class="modal"></div>
+
+    <!-- Thẻ để thêm registerModal -->
+    <div id="registerModal" class="modal"></div>
+
+    <div class="container">
+        <div id="main-content">
+            <div id="create-study-method">
+                <h3>Tạo Phương Pháp Học</h3>
+                <form id="study-method-form">
+                    <div class="label-input">
+                        <label for="name">Tên phương pháp:</label>
+                        <input type="text" id="name" name="name" placeholder="Nhập tên phương pháp" required>
+                    </div>
+
+                    <div class="label-input">
+                        <label for="description">Mô tả:</label>
+                        <textarea id="description" name="description" placeholder="Nhập mô tả" required></textarea>
+                    </div>
+
+                    <div class="thumbnail-input">
+                        <label for="thumbnail">Ảnh minh hoạ:</label>
+                        <div class="thumbnail-preview-container">
+                            <input type="file" accept="image/*" id="thumbnail" name="thumbnail"
+                                placeholder="Chọn ảnh thumbnail" required>
+                            <img id="thumbnail-preview" src="" alt="Ảnh minh hoạ">
+                        </div>
+                    </div>
+
+                    <div class="label-input">
+                        <label for="typeId">Loại:</label>
+                        <select id="typeId" name="typeId" required>
+                        </select>
+                    </div>
+
+                    <label for="detail">Chi tiết:</label>
+                    <div id="detail-editor-container">
+                        <div id="detail-editor"></div>
+                    </div>
+
+                    <button type="submit">Tạo</button>
+
+                </form>
+                <div id="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../global.js"></script>
+    <script type="module" src="../js/header.js"></script>
+    <!-- Thêm script của Quill -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script type="module" src="../js/create_study_method.js"></script>
+
+</body>
+
+</html>

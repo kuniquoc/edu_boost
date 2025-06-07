@@ -1,0 +1,66 @@
+:root {
+    --light-blue-color: #5696f8;
+    --dark-blue-color: #068edd;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    height: calc(100vh - 50px);
+    width: 100vw;
+    background-image: url(../images/background.jpg);
+    background-color: rgba(0, 0, 0, 0.8);
+    background-size: cover;
+    border-radius: 8px;
+}
+
+.container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    opacity: 0.15;
+}
+
+/*Main content*/
+#main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    z-index: 1;
+}
+
+#main-content h2 {
+    font-size: 4em;
+    font-weight: bold;
+    background: linear-gradient(270deg, #6ffdbb, #41fbc9, #5ae8f5, #6ba6ef, #6ba6ef, #5ae8f5, #41fbc9, #6ffdbb);
+    background-size: 400% 400%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientAnimation 3s ease infinite;
+    filter: contrast(1.3);
+}
+
+#main-content p {
+    font-size: 30px;
+    font-weight: 600px;
+    text-shadow: 0 0 30px #000000;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}

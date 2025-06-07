@@ -1,0 +1,117 @@
+:root {
+    --navigation-color-before: #c3c3c3;
+    --background-color: #ffffff;
+    --light-blue-color: #5696f8;
+    --dark-blue-color: #068edd;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Source Sans 3", sans-serif;
+}
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    padding: 0px 4px;
+    background: var(--background-color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 99;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+}
+
+.logo {
+    height: 100%;
+}
+
+.logo a {
+    height: 100%;
+}
+
+.logo a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* transform: scale(2.2); */
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link a {
+    position: relative;
+    font-size: 0.8em;
+    color: var(--navigation-color-before);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+}
+
+.link a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: var(--light-blue-color);
+    border-radius: 5px;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform .5s;
+}
+
+.link a:hover::after {
+    transform-origin: left;
+    transform: scaleX(1);
+}
+
+.user-avatar {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #068edd;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 10px;
+}
+
+.btnLog {
+    padding: 5px 10px;
+    background: var(--light-blue-color);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: 500;
+    margin-left: 10px;
+    transition: .5s;
+}
+
+.btnLog:hover {
+    background: var(--dark-blue-color);
+}
+
+.login-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}

@@ -1,0 +1,234 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Source Sans 3', sans-serif;
+    background-color: #f9fafb;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    height: calc(100vh - 80px);
+    margin-top: 60px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.left-section {
+    flex: 1;
+    background-color: #B2EBF2;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.right-section {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #64B5F6;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: #555;
+}
+
+.editable-input {
+    width: 100%;
+    font-size: 16px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+.editable-input:focus {
+    border-color: #007bff;
+    outline: none;
+    background-color: #fff;
+}
+
+textarea.editable-input {
+    resize: none;
+}
+
+#event-button {
+    display: flex;
+    justify-content: space-between;
+}
+
+.save-event,
+.add-todo-btn,
+.add-method-btn {
+    margin-bottom: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.save-event:hover,
+.add-todo-btn:hover,
+.add-method-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.save-event:active,
+.add-todo-btn:active,
+.add-method-btn:active {
+    transform: translateY(0);
+}
+
+.delete-event {
+    margin-bottom: 10px;
+    background-color: #dc3545;
+    color: #ffffff;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.delete-event:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+.delete-event:active {
+    transform: translateY(0);
+}
+
+#todoListHeader,
+#methodListHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#todoListHeader label,
+#methodListHeader label {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+#todoListHeader button,
+#methodListHeader button {
+    background-color: #28a745;
+}
+
+#todoListHeader button:hover,
+#methodListHeader button:hover {
+    background-color: #218838;
+}
+
+.todo-list ul,
+.method-list ul {
+    height: 230px;
+    overflow-y: auto;
+    list-style-type: none;
+    padding: 0;
+}
+
+.todo-list li,
+.method-list li {
+    font-size: 16px;
+    margin-bottom: 12px;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.todo-list li {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.todo-list li .todo-list-item {
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    background-color: #e8f5e9;
+    transition: border-color 0.3s;
+}
+
+.todo-list li .todo-list-item:focus {
+    border-color: #4caf50;
+    outline: none;
+    background-color: #ffffff;
+}
+
+.todo-list .done {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.done-btn {
+    margin-left: 10px;
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.done-btn:hover {
+    background-color: #218838;
+}
+
+.method-list li {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+}
+
+.method-link a {
+    color: #2196f3;
+    text-decoration: none;
+}
+
+.delete-btn {
+    margin-left: 10px;
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
