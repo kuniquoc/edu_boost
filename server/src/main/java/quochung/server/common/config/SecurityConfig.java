@@ -1,7 +1,7 @@
-package quochung.server.config;
+package quochung.server.common.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,18 +25,16 @@ import quochung.server.util.JwtUtils;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
         String[] publicUrl = { "/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/subject-types" };
 
-        @Autowired
-        private UserDetailsServiceImplement userDetailsService;
+        private final UserDetailsServiceImplement userDetailsService;
 
-        @Autowired
-        private JwtUtils jwtUtils;
+        private final JwtUtils jwtUtils;
 
-        @Autowired
-        private PasswordEncoder passwordEncoder;
+        private final PasswordEncoder passwordEncoder;
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -44,6 +42,8 @@ public class SecurityConfig {
                                 .requestMatchers(publicUrl).permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/study-methods/public/**").permitAll()
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/mod/**").hasRole("MOD")
                                 .anyRequest().authenticated());
                 http.sessionManagement(sessionManagement -> sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -77,7 +77,8 @@ public class SecurityConfig {
 }
 
 @Configuration
-class PasswordEncoderConfig {
+class
+PasswordEncoderConfig {
 
         @Bean
         public PasswordEncoder passwordEncoder() {
